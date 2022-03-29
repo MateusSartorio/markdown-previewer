@@ -1,58 +1,37 @@
+// Importing default React stuff
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
 
-function App() {
+// Importing custom components
+import { Editor } from './components/Editor';
+import { Previewer } from './components/Previewer';
+
+// Importing Redux stuff
+import { connect } from 'react-redux';
+import { ActionTypes } from './reducers/rootReducer';
+
+// Importing the main CSS stylesheet
+
+const App = (props: any) => {
+  const { code, changeCode } = props;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Editor code={code} changeCode={changeCode}/>
+      <Previewer code={code}/>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: {code: string}): any => {
+  return {
+    code: state.code,
+  };
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    changeCode: (code: string) => dispatch({type: ActionTypes.CHANGE_CODE, code})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
